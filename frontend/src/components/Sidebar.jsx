@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   ClipboardList,
   MessageSquare,
-  Building2
+  Building2,
+  Bell
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -23,6 +24,8 @@ const Sidebar = () => {
     { name: 'Ads Management', icon: <Megaphone size={20} />, path: '/ads', roles: ['superadmin', 'admin'] },
     { name: 'Quotations', icon: <FileText size={20} />, path: '/quotations', roles: ['superadmin', 'admin', 'agent', 'theatre_user'] },
     { name: 'Theatre Requests', icon: <Building2 size={20} />, path: '/theatre-requests', roles: ['superadmin', 'admin'] },
+    { name: 'Theatre Responses', icon: <MessageSquare size={20} />, path: '/theatre-responses', roles: ['superadmin', 'admin'] },
+    { name: 'Admin Requests', icon: <Bell size={20} />, path: '/admin-requests', roles: ['theatre_user'] },
     { name: 'Agent Responses', icon: <ClipboardList size={20} />, path: '/sales/requests', roles: ['superadmin', 'admin'] },
     { name: 'Admin Responses', icon: <MessageSquare size={20} />, path: '/sales/responses', roles: ['agent', 'theatre_user'] },
     { name: 'Users', icon: <Users size={20} />, path: '/users', roles: ['superadmin', 'admin'] },

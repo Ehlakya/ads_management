@@ -27,6 +27,8 @@ import SendQuotation from './pages/Quotations/SendQuotation';
 import QuotationDetails from './pages/Quotations/QuotationDetails';
 import QuotationRequestForm from './pages/Quotations/QuotationRequestForm';
 import TheatreRequests from './pages/Quotations/TheatreRequests';
+import TheatreResponses from './pages/Quotations/TheatreResponses';
+import AdminRequests from './pages/Quotations/AdminRequests';
 import SalesList from './pages/Sales/SalesList';
 import AgentRequests from './pages/Sales/AgentRequests';
 import AdminResponse from './pages/Sales/AdminResponse';
@@ -109,6 +111,16 @@ const App = () => {
             <Route path="theatre-requests" element={
               <ProtectedRoute allowedRoles={['superadmin', 'admin']}>
                 <TheatreRequests />
+              </ProtectedRoute>
+            } />
+            <Route path="theatre-responses" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'admin']}>
+                <TheatreResponses />
+              </ProtectedRoute>
+            } />
+            <Route path="admin-requests" element={
+              <ProtectedRoute allowedRoles={['theatre_user']}>
+                <AdminRequests />
               </ProtectedRoute>
             } />
             

@@ -93,9 +93,11 @@ const TheatreRequests = () => {
     const fetchTheatreRequests = async () => {
       try {
         const response = await quotationService.getTheatreRequests();
-        setRequests(response.data || []);
-        if (response.data.length === 0) {
-          toast.error('No theatre requests found');
+        // Filter: Show only initial requests (where no screen suggestion has been made yet)
+        const initialRequests = (response.data || []).filter(req => !req.admin_suggested_screen);
+        setRequests(initialRequests);
+        if (initialRequests.length === 0 && response.data.length > 0) {
+           // If there are requests but all are negotiated, show empty for this page
         }
       } catch (error) {
         toast.error('Failed to load theatre requests');
@@ -119,8 +121,8 @@ const TheatreRequests = () => {
   return (
     <div className="theatre-requests-container">
       <header className="page-header">
-        <h1 className="page-title">Theatre Quotation Requests</h1>
-        <p className="page-subtitle">Manage and review quotation confirmations from theatre venues</p>
+        <h1 className="page-title">Theatre Campaign Requests</h1>
+        <p className="page-subtitle">Review initial advertisement assignments and feedback from theatre owners</p>
       </header>
 
       {requests.length === 0 ? (
@@ -168,7 +170,7 @@ const TheatreRequests = () => {
                             onChange={(e) => setSuggestedScreen(Number(e.target.value))}
                             className="screen-select"
                           >
-                            {[1, 2, 3, 4, 5].map(num => (
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                               <option key={num} value={num}>Screen {num}</option>
                             ))}
                           </select>
@@ -622,46 +624,71 @@ const TheatreRequests = () => {
         .negotiation-form {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          background: rgba(255,255,255,0.05);
-          padding: 0.4rem 0.6rem;
-          border-radius: 8px;
-          border: 1px solid var(--border);
+          gap: 0.6rem;
+          background: rgba(99, 102, 241, 0.08);
+          padding: 0.5rem 0.8rem;
+          border-radius: 10px;
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(20px); }
+          to { opacity: 1; transform: translateX(0); }
         }
 
         .screen-select {
-          background: #111;
+          background: #0a0a0a;
           border: 1px solid var(--border);
           color: white;
-          padding: 0.25rem 0.5rem;
-          border-radius: 4px;
+          padding: 0.4rem 0.6rem;
+          border-radius: 6px;
           font-size: 0.85rem;
+          font-weight: 600;
+          outline: none;
+          cursor: pointer;
+        }
+
+        .screen-select:focus {
+          border-color: var(--primary);
+          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
 
         .btn-send-suggestion {
           background: var(--primary);
           color: white;
           border: none;
-          padding: 0.4rem 0.75rem;
-          border-radius: 4px;
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
           font-size: 0.85rem;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-send-suggestion:hover {
+          background: #4f46e5;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .btn-cancel-negotiation {
-          background: none;
-          border: none;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border);
           color: var(--text-muted);
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 0.25rem;
+          padding: 0.45rem;
+          border-radius: 6px;
+          transition: all 0.2s;
         }
 
         .btn-cancel-negotiation:hover {
+          background: rgba(239, 68, 68, 0.1);
           color: #ef4444;
+          border-color: rgba(239, 68, 68, 0.2);
         }
 
         .btn-negotiate {

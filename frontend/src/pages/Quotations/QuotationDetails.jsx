@@ -231,6 +231,60 @@ const QuotationDetails = () => {
             </button>
           </div>
         )}
+
+        {user?.role === 'theatre_user' && quotation.admin_suggested_screen && quotation.theatre_screen_decision === 'pending' && (
+          <div className="negotiation-card">
+            <div className="negotiation-header">
+              <Monitor size={20} />
+              <h3>Admin Suggested a Screen Change</h3>
+            </div>
+            <p className="negotiation-text">
+              The administrator has suggested changing your assigned screen to <strong>Screen {quotation.admin_suggested_screen}</strong>. 
+              Please review and accept or reject this suggestion.
+            </p>
+            <div className="negotiation-actions">
+              <button 
+                className="btn-accept-suggestion"
+                onClick={async () => {
+                  try {
+                    await quotationService.respondToScreenSuggestion(quotation.id, 'accepted');
+                    toast.success('Screen suggestion accepted');
+                    window.location.reload();
+                  } catch (error) {
+                    toast.error('Failed to accept suggestion');
+                  }
+                }}
+              >
+                <CheckCircle size={18} />
+                <span>Accept Suggestion</span>
+              </button>
+              <button 
+                className="btn-reject-suggestion"
+                onClick={async () => {
+                  try {
+                    await quotationService.respondToScreenSuggestion(quotation.id, 'rejected');
+                    toast.success('Screen suggestion rejected');
+                    window.location.reload();
+                  } catch (error) {
+                    toast.error('Failed to reject suggestion');
+                  }
+                }}
+              >
+                <XCircle size={18} />
+                <span>Reject Suggestion</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {quotation.theatre_screen_decision !== 'pending' && quotation.admin_suggested_screen && (
+          <div className={`decision-notice ${quotation.theatre_screen_decision}`}>
+            <Shield size={18} />
+            <span>
+              You have <strong>{quotation.theatre_screen_decision}</strong> the admin's suggestion for Screen {quotation.admin_suggested_screen}.
+            </span>
+          </div>
+        )}
       </div>
 
       {videoModal.isOpen && (
@@ -443,6 +497,106 @@ const QuotationDetails = () => {
           justify-content: center;
           gap: 1rem;
           color: var(--text-muted);
+        }
+
+        .negotiation-card {
+          margin-top: 1rem;
+          background: rgba(99, 102, 241, 0.05);
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          border-radius: 12px;
+          padding: 1.5rem;
+          animation: slideUp 0.4s ease-out;
+        }
+
+        .negotiation-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          color: var(--primary);
+          margin-bottom: 1rem;
+        }
+
+        .negotiation-header h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: white;
+        }
+
+        .negotiation-text {
+          color: var(--text-muted);
+          font-size: 0.95rem;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .negotiation-actions {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .btn-accept-suggestion,
+        .btn-reject-suggestion {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.75rem;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .btn-accept-suggestion {
+          background: var(--success);
+          color: white;
+          border: none;
+        }
+
+        .btn-accept-suggestion:hover {
+          opacity: 0.9;
+          transform: translateY(-2px);
+        }
+
+        .btn-reject-suggestion {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-reject-suggestion:hover {
+          background: rgba(239, 68, 68, 0.2);
+          transform: translateY(-2px);
+        }
+
+        .decision-notice {
+          margin-top: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1rem 1.5rem;
+          border-radius: 10px;
+          font-weight: 500;
+          font-size: 0.9rem;
+        }
+
+        .decision-notice.accepted {
+          background: rgba(34, 197, 94, 0.1);
+          color: var(--success);
+          border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .decision-notice.rejected {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .video-modal-overlay {

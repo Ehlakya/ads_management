@@ -39,26 +39,6 @@ const AdminResponse = () => {
     }
   };
 
-  const handleScreenDecision = async (requestId, decision) => {
-    try {
-      await quotationService.respondToScreenSuggestion(requestId, decision);
-      setQuotationRequests(prev => 
-        prev.map(req => 
-          req.id === requestId 
-            ? { 
-                ...req, 
-                theatre_screen_decision: decision,
-                selected_screens: decision === 'accepted' ? [req.admin_suggested_screen] : req.selected_screens 
-              }
-            : req
-        )
-      );
-      toast.success(`Screen suggestion ${decision} successfully`);
-    } catch (error) {
-      toast.error('Failed to submit screen decision');
-    }
-  };
-
   return (
     <div className="admin-response-page">
       <header className="page-header">
@@ -163,37 +143,17 @@ const AdminResponse = () => {
                       <MessageSquare size={14} />
                       <span>Admin Response</span>
                     </div>
-                    {req.admin_suggested_screen && req.theatre_screen_decision === 'pending' ? (
-                      <div className="negotiation-alert">
-                        <p>The Admin has suggested a different screen for this campaign: <strong>Screen {req.admin_suggested_screen}</strong>.</p>
-                        <div className="negotiation-actions">
-                          <button 
-                            className="btn-accept-suggestion"
-                            onClick={() => handleScreenDecision(req.id, 'accepted')}
-                          >
-                            Accept Screen
-                          </button>
-                          <button 
-                            className="btn-reject-suggestion"
-                            onClick={() => handleScreenDecision(req.id, 'rejected')}
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <p>
-                        {req.theatre_screen_decision === 'accepted' && req.admin_suggested_screen
-                          ? `You have accepted the suggestion to move this campaign to Screen ${req.admin_suggested_screen}.`
-                          : req.theatre_screen_decision === 'rejected'
-                          ? `You declined the Admin's suggestion for a different screen.`
-                          : status === 'accepted'
-                          ? 'Your request for this campaign has been accepted. We will coordinate the activation soon.'
-                          : status === 'rejected'
-                          ? 'Unfortunately, your request for this campaign was not approved at this time.'
-                          : 'Your message regarding this campaign is being reviewed by the administration.'}
-                      </p>
-                    )}
+                    <p>
+                      {req.theatre_screen_decision === 'accepted' && req.admin_suggested_screen
+                        ? `You have accepted the suggestion to move this campaign to Screen ${req.admin_suggested_screen}.`
+                        : req.theatre_screen_decision === 'rejected'
+                        ? `You declined the Admin's suggestion for a different screen.`
+                        : status === 'accepted'
+                        ? 'Your request for this campaign has been accepted. We will coordinate the activation soon.'
+                        : status === 'rejected'
+                        ? 'Unfortunately, your request for this campaign was not approved at this time.'
+                        : 'Your message regarding this campaign is being reviewed by the administration.'}
+                    </p>
                   </div>
                   
                   <div className="card-footer">

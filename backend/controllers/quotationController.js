@@ -38,6 +38,8 @@ exports.getQuotations = async (req, res) => {
         theatre_message: quotation.theatre_message || null,
         admin_response: quotation.admin_response || null,
         admin_response_at: quotation.admin_response_at || null,
+        admin_suggested_screen: quotation.admin_suggested_screen || null,
+        theatre_screen_decision: quotation.theatre_screen_decision || 'pending',
         created_at: quotation.created_at || null,
       };
     });
@@ -223,6 +225,8 @@ exports.getTheatreRequests = async (req, res) => {
       notes: req.notes,
       theatre_message: req.theatre_message,
       selected_screens: req.selected_screens,
+      admin_suggested_screen: req.admin_suggested_screen,
+      theatre_screen_decision: req.theatre_screen_decision,
       ad: req.Ad ? {
         id: req.Ad.id,
         title: req.Ad.title,
