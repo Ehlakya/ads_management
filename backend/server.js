@@ -17,16 +17,19 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS
+const allowedOrigins = [
+  'https://ads-management-5msd-git-main-ehlakyas-projects.vercel.app',
+  'https://ads-management-5msd.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (
-      origin.includes('vercel.app') || 
-      origin.includes('localhost') || 
-      origin === 'https://ads-management-5msd.vercel.app'
-    ) {
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
