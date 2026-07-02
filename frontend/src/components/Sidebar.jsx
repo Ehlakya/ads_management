@@ -60,14 +60,6 @@ const Sidebar = ({ isOpen, onClose }) => {
         ))}
       </nav>
 
-      <div className="sidebar-footer">
-        <NavLink to="/settings" className="nav-item" onClick={() => {
-          if (window.innerWidth <= 1024) onClose();
-        }}>
-          <Settings size={20} />
-          <span>Settings</span>
-        </NavLink>
-      </div>
 
       <style>{`
         .sidebar {

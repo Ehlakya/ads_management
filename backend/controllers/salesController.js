@@ -23,7 +23,13 @@ exports.createSale = async (req, res) => {
 // @route   GET /api/sales
 exports.getSales = async (req, res) => {
   try {
+    const whereClause = {};
+    if (req.user.role !== 'superadmin' && req.user.role !== 'admin') {
+      whereClause.agent_id = req.user.id;
+    }
+
     const sales = await Sale.findAll({
+      where: whereClause,
       include: [
         { model: Ad, attributes: ['title'] },
         { model: User, attributes: ['name'] }
